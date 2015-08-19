@@ -111,7 +111,10 @@ class Mustache
           t.render(ctx.dup)
         else
           # Shortcut when passed non-array
-          v = [v] unless v.is_a?(Array) || defined?(Enumerator) && v.is_a?(Enumerator)
+          # NOTE: Rails (4.0) ActiveRecord::Associations::CollectionProxy does not respond to is_a?(Array) so wraps
+          # the array inside another array, this then breaks any enumerations on it.
+          #
+          v = [v] unless v.is_a?(Array) || (defined?(ActiveRecord::Associations) && v.is_a?(ActiveRecord::Associations::CollectionProxy)) || defined?(Enumerator) && v.is_a?(Enumerator)
 
           v.map { |h| ctx.push(h); r = #{code}; ctx.pop; r }.join
         end
