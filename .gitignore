@@ -5,6 +5,9 @@ Gemfile.lock
 # IDE
 .idea
 
+# VIM
+*.swp
+
 # Docs
 .yardoc
 doc/*
